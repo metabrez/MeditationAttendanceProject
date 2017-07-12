@@ -120,7 +120,7 @@ public class HomeController {
 
 		model.addAttribute("timeSlots", timeSlotList);
 		
-		System.out.println("welcome to change");
+		
 
 		return "timeSlotsList";
 
