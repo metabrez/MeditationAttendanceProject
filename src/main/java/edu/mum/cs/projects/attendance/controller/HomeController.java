@@ -99,6 +99,7 @@ public class HomeController {
 			model.addAttribute("error", "You have been logout successfully");
 		}
 
+		
 		return "login";
 	}
 
@@ -118,6 +119,8 @@ public class HomeController {
 		List<Timeslot> timeSlotList = timeSlotService.getTimeSlot();
 
 		model.addAttribute("timeSlots", timeSlotList);
+		
+		System.out.println("welcome to change");
 
 		return "timeSlotsList";
 
