@@ -1,6 +1,3 @@
-
-
-
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -9,7 +6,6 @@
 <script src="https://code.jquery.com/jquery-3.2.1.js"
 	integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
 	crossorigin="anonymous"></script>
-
 
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -44,13 +40,9 @@
 						<li>balancing the nervous system activation</li>
 						<li>balancing hormonal levels.</li>
 						<li>increasing brain coherence.</li>
-
-
-
 					</ul>
 					<p>
-						<a class="btn btn-lg btn-primary" href="#" role="button">Sign
-							up today</a>
+						<a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a>
 					</p>
 				</div>
 			</div>
