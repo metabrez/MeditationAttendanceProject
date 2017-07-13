@@ -58,22 +58,14 @@ public class StudentServiceImpl implements StudentService {
 	public List<Student> getStudentsByEntry(String entryDate) {
 		return studentRepository.findByEntryDate(DateUtil.convertStringToDate(entryDate));
 	}
+
+	@Override
+	public Student findStudentById(String id) {
+		return studentRepository.findOne(id);
+	}
+	
 	@Override
 	public List<Student> getAllStudents() {
 		return studentRepository.findAll();
 	}
-
-	@Override
-	public Student save(Student student) {
-		
-		return studentRepository.save(student);
-	}
-/*
-	@Override
-	public Student getStudentById(long id) {
-		
-		return studentRepository.findById(id);
-		
-	}
-*/
 }

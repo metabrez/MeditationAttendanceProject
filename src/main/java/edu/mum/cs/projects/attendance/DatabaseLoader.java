@@ -19,7 +19,7 @@ import edu.mum.cs.projects.attendance.service.DatabaseLoaderService;
  */
 @SpringBootApplication
 public class DatabaseLoader {
-
+	
 	public static void main(String[] args) throws Exception {
 		ConfigurableApplicationContext context = SpringApplication.run(DatabaseLoader.class, args);
 

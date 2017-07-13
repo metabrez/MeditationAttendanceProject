@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Meditation Attendane System</title>
+    <title>Meditation Attendance System</title>
     <%--Angular js--%>
     <script src="https://code.angularjs.org/1.4.8/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
