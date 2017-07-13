@@ -1,10 +1,7 @@
 package edu.mum.cs.projects.attendance.domain.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -18,22 +15,18 @@ import edu.mum.cs.projects.attendance.domain.Identifiable;
 @Immutable
 @Table(name="user")
 public class User implements Identifiable<String> {
-	 @Id
-	  @GeneratedValue(strategy = GenerationType.AUTO)
-	  @Column(name = "user_id")
-	  private long id;
-
+	@Id
 	@Column(name="username", columnDefinition = "nvarchar(25)")
     private String userName;
 
 	@Column(name="password", columnDefinition = "nvarchar(25)")
     private String password;
     
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne
 	@JoinColumn(name="studentId", columnDefinition = "nvarchar(50)")
 	private Student student;
 	
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne
 	@JoinColumn(name="facultyId", columnDefinition = "int")
 	private Faculty faculty;
 	

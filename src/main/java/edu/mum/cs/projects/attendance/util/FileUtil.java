@@ -93,7 +93,7 @@ public class FileUtil {
 		return result;
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException {
+	/*public static void main(String[] args) throws FileNotFoundException {
 		System.out.println(readFile("email_body_part1.txt"));
-	}
+	}*/
 }

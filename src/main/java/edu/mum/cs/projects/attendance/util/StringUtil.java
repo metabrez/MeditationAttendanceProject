@@ -1,5 +1,8 @@
 package edu.mum.cs.projects.attendance.util;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+
 public class StringUtil {
 	
 	public static String properCase(String name) {
@@ -36,4 +39,19 @@ public class StringUtil {
 		return new String(result);
 	}
 
+	public static String getMD5(String msg) {
+		String md5 = "";
+		try {
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			m.reset();
+			m.update(msg.getBytes());
+			byte[] digest = m.digest();
+			BigInteger bigInt = new BigInteger(1, digest);
+			md5 = bigInt.toString(16);
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return md5;
+	}
 }
