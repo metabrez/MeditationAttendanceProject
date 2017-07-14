@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.mum.cs.projects.attendance.domain.StudentAttendance;
 import edu.mum.cs.projects.attendance.domain.entity.Course;
@@ -60,12 +61,14 @@ public class HomeController {
 	 * return modelAndView; }
 	 */
 
-	@GetMapping("/")
+	/*@GetMapping("/")
 	public String homePage() {
-
-		/*attendanceServiceImpl.createAttendanceReportForEntry("2017-04-27");*/
 		return "home";
+	}*/
 
+	@GetMapping("/")
+	public ModelAndView homePage() {
+		return new ModelAndView("home");
 	}
 
 	@GetMapping("/studentDetails")
