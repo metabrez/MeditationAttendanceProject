@@ -131,7 +131,10 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 		AcademicBlock block = courseService
 				.getAcademicBlock(DateUtil.convertDateToString(courseOffering.getStartDate()));
-
+		if(null == block) {
+			System.out.println("====TRI: block is null for CourseOffering: " + courseOffering.getId());
+			return null;
+		}
 		Date beginDate = DateUtil.convertLocalDateToDate(block.getBeginDate());
 		Date endDate = DateUtil.convertLocalDateToDate(block.getEndDate());
 		List<BarcodeRecord> barcodeRecords = barcodeRecordRepository.findByDateBetween(beginDate, endDate);
