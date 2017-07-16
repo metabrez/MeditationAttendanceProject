@@ -71,7 +71,9 @@ public class StudentAttendance {
 	}
 
 	public double getMeditaionPercentage() {
-		return 100.0 * getMeditationCount() / courseOffering.getBlock().getRequiredSessions();
+		//TRI changed: to check getBlock is not null
+		if(courseOffering.getBlock() != null) return 100.0 * getMeditationCount() / courseOffering.getBlock().getRequiredSessions();
+		else return 0.0;
 	}
 
 	public double getMeditationExtraGrade() {
@@ -111,7 +113,8 @@ public class StudentAttendance {
 		sb.append(String.format("Total = %3d or ", presentCount));
 		int requiredSessions = attendance.size();
 		if(null != courseOffering) {
-			requiredSessions = courseOffering.getBlock().getRequiredSessions();
+			if(null != courseOffering.getBlock())
+				requiredSessions = courseOffering.getBlock().getRequiredSessions();
 		}
 		sb.append(String.format("%5.1f", (float) (100.0 * presentCount) / requiredSessions));
 		sb.append("%]");
