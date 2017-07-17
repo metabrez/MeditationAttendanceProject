@@ -35,6 +35,7 @@ public class BarcodeRecord implements Identifiable<Long> {
 	
 	@Id
 	@GeneratedValue
+	@Column(name="id")
 	private Long id;
 	
 	@Column(nullable=false, length=13)

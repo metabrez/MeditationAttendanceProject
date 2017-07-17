@@ -36,7 +36,7 @@ import edu.mum.cs.projects.attendance.domain.Identifiable;
 public class CourseOffering implements Identifiable<Long> {
 	
 	@Id
-	@Column(columnDefinition = "int")
+	@Column(name="id")
     private Long id;
 
 	@ManyToOne

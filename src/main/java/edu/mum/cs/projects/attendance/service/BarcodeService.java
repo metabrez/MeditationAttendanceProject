@@ -10,5 +10,5 @@ public interface BarcodeService {
 	List<BarcodeRecord> getBarcodeRecordsList();
 
 	List<BarcodeRecord> getBarcodeRecordsList(LocalDate startDate, LocalDate endDate);
-
+	
 }
