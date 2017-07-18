@@ -1,12 +1,14 @@
 package edu.mum.cs.projects.attendance.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import edu.mum.cs.projects.attendance.domain.AttendanceRecord;
 import edu.mum.cs.projects.attendance.domain.StudentAttendance;
 import edu.mum.cs.projects.attendance.domain.entity.BarcodeRecord;
 import edu.mum.cs.projects.attendance.domain.entity.Course;
+import edu.mum.cs.projects.attendance.domain.entity.Location;
 import edu.mum.cs.projects.attendance.domain.entity.Student;
+import edu.mum.cs.projects.attendance.domain.entity.Timeslot;
 import edu.mum.cs.projects.attendance.domain.entity.User;
 
 public interface IServiceFacade {
@@ -29,6 +31,8 @@ public interface IServiceFacade {
     public List<Student> findStudents(String id, String firstName, String lastName);
     public List<StudentAttendance> getAttendanceForAllEnrollmentCourses(String studentID);
     public List<BarcodeRecord> getCourseAttendanceDetails(int offerID, String studentID);
-    public int createAttendanceRecord(String barcode, LocalDate date);
+    public int createAttendanceRecord(AttendanceRecord record);
     public int deleteAttendanceRecord(long id);
+    public List<Timeslot> getAllTimeslots();
+    public List<Location> getAllLocations();
 }

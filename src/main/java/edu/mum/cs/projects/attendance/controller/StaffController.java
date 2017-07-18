@@ -3,17 +3,22 @@ package edu.mum.cs.projects.attendance.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import edu.mum.cs.projects.attendance.domain.AttendanceRecord;
 import edu.mum.cs.projects.attendance.domain.StudentAttendance;
 import edu.mum.cs.projects.attendance.domain.entity.BarcodeRecord;
 import edu.mum.cs.projects.attendance.domain.entity.Student;
@@ -24,6 +29,11 @@ public class StaffController {
 	
 	@Autowired
 	private IServiceFacade serviceFacade;
+	
+	@ModelAttribute("attendanceRecord")
+    public AttendanceRecord getAttendanceRecord() {
+        return new AttendanceRecord();         
+    }
 	
 	@GetMapping("/studentCoursesAttendances")
     public String studentCoursesAttendances(@RequestParam(value="id", required=true) String studentID, Model model) {
@@ -88,7 +98,7 @@ public class StaffController {
 		return "attendanceDetail";
     }
 	
-	@RequestMapping(name="/deleteAttendance", method=RequestMethod.POST)
+	@RequestMapping(value="/deleteAttendance", method=RequestMethod.POST)
     public String deleteAttendance(HttpServletRequest httpRequest, RedirectAttributes rattrs) {
         String studentId = httpRequest.getParameter("studentId");
         String barcodeRecordId = httpRequest.getParameter("barcodeRecordId");
@@ -108,5 +118,35 @@ public class StaffController {
         }
         
         return "redirect:/studentCourseAttendanceDetail?offerId="+offerId+"&studentId="+studentId;
+    }
+	
+	//@RequestMapping(value="/createAttendance", method = RequestMethod.GET)
+	@GetMapping("/createAttendance")
+	public ModelAndView showForm(Model model) {
+		//Map referenceData = new HashMap();
+		//referenceData.put("timeslotList", serviceFacade.getAllTimeslots().stream().collect(Collectors.toMap(Timeslot::getId, Timeslot::getTitle)));
+		
+		model.addAttribute("timeslotList", serviceFacade.getAllTimeslots());
+		model.addAttribute("locationList", serviceFacade.getAllLocations());
+        return new ModelAndView("createAttendance", "attendanceRecord", getAttendanceRecord());
+    }
+	
+	@RequestMapping(value="/saveAttendance", method=RequestMethod.POST)
+	public String saveAttendance(@Valid @ModelAttribute("attendanceRecord")AttendanceRecord attendanceRecord, BindingResult result, ModelMap model) {
+		System.out.println("--------------"+attendanceRecord.getBarcode());
+		System.out.println("--------------"+attendanceRecord.getDate());
+		System.out.println("--------------"+attendanceRecord.getLocation());
+		System.out.println("--------------"+attendanceRecord.getTimeslot());
+		if (result.hasErrors()) {
+			System.out.println("has error............");
+            return "createAttendance";
+        }
+		if(serviceFacade.createAttendanceRecord(attendanceRecord) == 0) {
+			System.out.println("save successfully............");
+		}
+		else {
+			System.out.println("save failed............");
+		}
+        return "redirect:/createAttendance";
     }
 }

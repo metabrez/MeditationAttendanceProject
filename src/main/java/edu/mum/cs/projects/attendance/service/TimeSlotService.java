@@ -7,5 +7,5 @@ import edu.mum.cs.projects.attendance.domain.entity.Timeslot;
 public interface TimeSlotService {
 	
 	List<Timeslot> getTimeSlot();
-
+	Timeslot findById(String id);
 }

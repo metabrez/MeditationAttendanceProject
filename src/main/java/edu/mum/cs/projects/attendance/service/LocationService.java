@@ -5,7 +5,6 @@ import java.util.List;
 import edu.mum.cs.projects.attendance.domain.entity.Location;
 
 public interface LocationService {
-	
 	List<Location> getAllLocations();
-
+	Location findById(String id);
 }

@@ -16,9 +16,12 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	public List<Location> getAllLocations() {
-		
-		
 		return loactionRepository.findAll();
+	}
+
+	@Override
+	public Location findById(String id) {
+		return loactionRepository.findOne(id);
 	}
 
 }
