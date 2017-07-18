@@ -20,8 +20,7 @@ import edu.mum.cs.projects.attendance.domain.entity.BarcodeRecord;
  * 
  */
 @Repository
-public interface BarcodeRecordRepository extends CrudRepository<BarcodeRecord, Integer> {
-	
+public interface BarcodeRecordRepository extends CrudRepository<BarcodeRecord, Long> {
 	List<BarcodeRecord> findByDateBetween(Date beginDate, Date endDate);
-	
+	List<BarcodeRecord> findByDateBetweenAndBarcode(Date beginDate, Date endDate, String barcode);
 }

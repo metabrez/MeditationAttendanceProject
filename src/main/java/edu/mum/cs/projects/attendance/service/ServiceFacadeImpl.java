@@ -1,6 +1,6 @@
 package edu.mum.cs.projects.attendance.service;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,11 +8,21 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.mum.cs.projects.attendance.domain.AttendanceRecord;
 import edu.mum.cs.projects.attendance.domain.StudentAttendance;
+import edu.mum.cs.projects.attendance.domain.entity.AcademicBlock;
+import edu.mum.cs.projects.attendance.domain.entity.BarcodeRecord;
 import edu.mum.cs.projects.attendance.domain.entity.Course;
+import edu.mum.cs.projects.attendance.domain.entity.CourseOffering;
 import edu.mum.cs.projects.attendance.domain.entity.Enrollment;
+import edu.mum.cs.projects.attendance.domain.entity.Location;
 import edu.mum.cs.projects.attendance.domain.entity.Student;
+import edu.mum.cs.projects.attendance.domain.entity.Timeslot;
 import edu.mum.cs.projects.attendance.domain.entity.User;
+import edu.mum.cs.projects.attendance.repository.AcademicBlockRepository;
+import edu.mum.cs.projects.attendance.repository.BarcodeRecordRepository;
+import edu.mum.cs.projects.attendance.repository.CourseOfferingRepository;
+import edu.mum.cs.projects.attendance.util.DateUtil;
 
 @Service
 public class ServiceFacadeImpl implements IServiceFacade {
@@ -28,6 +38,21 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CourseOfferingRepository courseOfferingRepository;
+	
+	@Autowired
+	private BarcodeRecordRepository barcodeRecordRepository;
+	
+	@Autowired
+	private AcademicBlockRepository academicBlockRepository;
+	
+	@Autowired
+	private TimeSlotService timeSlotService;
+	
+	@Autowired
+	private LocationService locationService;
 	
 	@Override
 	public List<Course> getCourseListForStudent(String studentID) {
@@ -90,23 +115,65 @@ public class ServiceFacadeImpl implements IServiceFacade {
 		
 		return list;
 	}
-
+	
 	@Override
-	public int createAttendanceRecord(String barcode, LocalDate date) {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<BarcodeRecord> getCourseAttendanceDetails(int offerID, String studentID) {
+		List<BarcodeRecord> listRecord = null;
+
+		CourseOffering offer = courseOfferingRepository.findOne((long)offerID);
+		if(offer != null) {
+			AcademicBlock block = academicBlockRepository.findByBeginDate(offer.getStartDate());
+			if(block != null) {
+				Student student = studentService.findStudentById(studentID);
+				if(student != null) {
+					//listRecord = barcodeService.getBarcodeRecordsList(block.getBeginDate(), block.getEndDate()).stream().filter(br->br.getBarcode().equals(student.getBarcode())).collect(Collectors.toList());
+					listRecord = barcodeRecordRepository.findByDateBetweenAndBarcode(DateUtil.convertLocalDateToDate(block.getBeginDate()), DateUtil.convertLocalDateToDate(block.getEndDate()), student.getBarcode());
+				}
+			}
+		}
+		
+		return listRecord;
 	}
 
 	@Override
-	public int deleteAttendanceRecord(String barcode, LocalDate date) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int createAttendanceRecord(AttendanceRecord record) {
+		BarcodeRecord br = new BarcodeRecord();
+		br.setBarcode(record.getBarcode()); 
+		br.setDate(DateUtil.convertDateToLocalDate(DateUtil.convertStringToDate(record.getDate())));
+		br.setTime(LocalTime.of(0, 0, 0));
+		br.setLocation(locationService.findById(record.getLocation()));
+		br.setTimeslot(timeSlotService.findById(record.getTimeslot()));
+		if(null != barcodeRecordRepository.save(br)) {
+			return 0;
+		}
+		return 1;
+	}
+
+	@Override
+	public int deleteAttendanceRecord(long id) {
+		BarcodeRecord br = barcodeRecordRepository.findOne(id);
+		if(br != null) {
+			barcodeRecordRepository.delete(br);
+			return 0;
+		}
+		
+		return 1;
 	}
 
 	@Override
 	public List<Student> findStudents(String id, String firstName, String lastName) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Timeslot> getAllTimeslots() {
+		return timeSlotService.getTimeSlot();
+	}
+
+	@Override
+	public List<Location> getAllLocations() {
+		return locationService.getAllLocations();
 	}
 
 }

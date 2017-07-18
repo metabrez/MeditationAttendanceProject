@@ -22,4 +22,9 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 		return timeslotRepository.findAll();
 	}
 
+	@Override
+	public Timeslot findById(String id) {
+		return timeslotRepository.findOne(id);
+	}
+
 }
