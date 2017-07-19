@@ -176,4 +176,9 @@ public class ServiceFacadeImpl implements IServiceFacade {
 		return locationService.getAllLocations();
 	}
 
+	@Override
+	public Student findStudentByBarcode(String barcode) {
+		return studentService.findStudentByBarcode(barcode);
+	}
+
 }

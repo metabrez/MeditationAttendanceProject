@@ -27,5 +27,6 @@ public interface StudentService {
 	}
 	
 	Student findStudentById(String id);
+	Student findStudentByBarcode(String barcode);
 	List<Student> getAllStudents();
 }
