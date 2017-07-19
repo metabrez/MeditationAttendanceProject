@@ -39,7 +39,6 @@ public class HomeController {
 				return "/student/welcomeStaff";
 			}
 		}  
-
         return "home";
     }
 	
