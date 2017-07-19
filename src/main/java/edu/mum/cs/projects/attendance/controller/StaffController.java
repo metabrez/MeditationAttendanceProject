@@ -25,6 +25,7 @@ import edu.mum.cs.projects.attendance.domain.entity.Student;
 import edu.mum.cs.projects.attendance.service.IServiceFacade;
 
 @Controller
+@RequestMapping("/staff")
 public class StaffController {
 	
 	@Autowired
@@ -33,6 +34,11 @@ public class StaffController {
 	@ModelAttribute("attendanceRecord")
     public AttendanceRecord getAttendanceRecord() {
         return new AttendanceRecord();         
+    }
+	
+	@RequestMapping(value = {"/welcomeStaff"}, method = RequestMethod.GET)
+    public String welcome(Model model) {
+        return "welcomeStaff";
     }
 	
 	@GetMapping("/studentCoursesAttendances")
@@ -62,11 +68,9 @@ public class StaffController {
     											Model model) {
 		switch(delResult) {
 		case "OK":
-			System.out.println("===============Delete OK");
 			model.addAttribute("delResult", "Delete attendance record successfully!");
 			break;
 		case "NG":
-			System.out.println("===============Delete NG");
 			model.addAttribute("delResult", "Failed to delete attendance record!");
 			break;
 		}
@@ -104,27 +108,29 @@ public class StaffController {
         String barcodeRecordId = httpRequest.getParameter("barcodeRecordId");
         String offerId = httpRequest.getParameter("offerId");
         
-        //System.out.println("====["+studentId+"]");
-        //System.out.println("====["+barcodeRecordId+"]");
-        //System.out.println("====["+offerId+"]");
-        
         if(serviceFacade.deleteAttendanceRecord(Long.valueOf(barcodeRecordId)) == 0) {
-        	System.out.println("................delete successfully record");
         	rattrs.addAttribute("deleteResult", "OK");
         }
         else {
-        	System.out.println("................failed to delete successfully record");
         	rattrs.addAttribute("deleteResult", "NG");
         }
         
         return "redirect:/studentCourseAttendanceDetail?offerId="+offerId+"&studentId="+studentId;
     }
 	
-	//@RequestMapping(value="/createAttendance", method = RequestMethod.GET)
 	@GetMapping("/createAttendance")
-	public ModelAndView showForm(Model model) {
-		//Map referenceData = new HashMap();
-		//referenceData.put("timeslotList", serviceFacade.getAllTimeslots().stream().collect(Collectors.toMap(Timeslot::getId, Timeslot::getTitle)));
+	public ModelAndView showForm(@ModelAttribute("saveResult") String saveResult, Model model) {
+		switch(saveResult) {
+		case "OK":
+			model.addAttribute("createResult", "Create attendance record successfully!");
+			break;
+		case "NG":
+			model.addAttribute("createResult", "Failed to create attendance record!");
+			break;
+		case "NOT_VALID_BARCODE":
+			model.addAttribute("createResult", "Invalid barcode!");
+			break;
+		}
 		
 		model.addAttribute("timeslotList", serviceFacade.getAllTimeslots());
 		model.addAttribute("locationList", serviceFacade.getAllLocations());
@@ -132,21 +138,25 @@ public class StaffController {
     }
 	
 	@RequestMapping(value="/saveAttendance", method=RequestMethod.POST)
-	public String saveAttendance(@Valid @ModelAttribute("attendanceRecord")AttendanceRecord attendanceRecord, BindingResult result, ModelMap model) {
-		System.out.println("--------------"+attendanceRecord.getBarcode());
-		System.out.println("--------------"+attendanceRecord.getDate());
-		System.out.println("--------------"+attendanceRecord.getLocation());
-		System.out.println("--------------"+attendanceRecord.getTimeslot());
+	public String saveAttendance(@Valid @ModelAttribute("attendanceRecord")AttendanceRecord attendanceRecord, BindingResult result, ModelMap model, RedirectAttributes rattrs) {
 		if (result.hasErrors()) {
 			System.out.println("has error............");
             return "createAttendance";
         }
-		if(serviceFacade.createAttendanceRecord(attendanceRecord) == 0) {
-			System.out.println("save successfully............");
+		
+		//check valid barcode
+		if(serviceFacade.findStudentByBarcode(attendanceRecord.getBarcode()) != null) {
+			if(serviceFacade.createAttendanceRecord(attendanceRecord) == 0) {
+				rattrs.addAttribute("saveResult", "OK");
+			}
+			else {
+				rattrs.addAttribute("saveResult", "NG");
+			}
 		}
 		else {
-			System.out.println("save failed............");
+			rattrs.addAttribute("saveResult", "NOT_VALID_BARCODE");
 		}
+		
         return "redirect:/createAttendance";
     }
 }

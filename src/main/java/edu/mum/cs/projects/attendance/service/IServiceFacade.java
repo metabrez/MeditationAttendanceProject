@@ -29,6 +29,7 @@ public interface IServiceFacade {
 	
 	//using for personnel
     public List<Student> findStudents(String id, String firstName, String lastName);
+    public Student findStudentByBarcode(String barcode);
     public List<StudentAttendance> getAttendanceForAllEnrollmentCourses(String studentID);
     public List<BarcodeRecord> getCourseAttendanceDetails(int offerID, String studentID);
     public int createAttendanceRecord(AttendanceRecord record);

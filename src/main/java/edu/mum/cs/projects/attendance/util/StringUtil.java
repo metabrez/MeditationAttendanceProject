@@ -3,7 +3,10 @@ package edu.mum.cs.projects.attendance.util;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 public class StringUtil {
+	private static BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
 	
 	public static String properCase(String name) {
 		
@@ -53,5 +56,9 @@ public class StringUtil {
 			ex.printStackTrace();
 		}
 		return md5;
+	}
+	
+	public static String getBCrypt(String msg) {
+		return bCrypt.encode(msg);
 	}
 }

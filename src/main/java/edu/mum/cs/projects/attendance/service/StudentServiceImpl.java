@@ -68,4 +68,9 @@ public class StudentServiceImpl implements StudentService {
 	public List<Student> getAllStudents() {
 		return studentRepository.findAll();
 	}
+
+	@Override
+	public Student findStudentByBarcode(String barcode) {
+		return studentRepository.findByBarcode(barcode);
+	}
 }

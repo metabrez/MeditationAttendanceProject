@@ -1,7 +1,6 @@
 <%@include file="/WEB-INF/views/template/header.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-
 <script type="text/javascript">
 	function validateForm() {
 		var barcode = document.getElementById("barcode").value;
@@ -27,19 +26,21 @@
 	<div class="container">
 		<form:form method="POST" action="/saveAttendance" modelAttribute="attendanceRecord">
 			<h2>Create a Meditation Attendance Record</h2>
-	
-			<table class="table table-striped table-hover" border="0">
+			<c:if test="${not empty createResult}">
+                <div class="msg">${createResult}</div>
+            </c:if>
+			<table align="center" border="1" cellspacing="500" cellpadding="200">
 				<tr>
-					<td>Student's barcode:</td>
-					<td><form:input id="barcode" name="barcode" path="barcode" /></td>
+					<td align="right">Student's barcode:</td>
+					<td align="left"><form:input id="barcode" name="barcode" path="barcode" /></td>
 				</tr>
 				<tr>
-					<td>Date (YYYY-MM-DD):</td>
-					<td><form:input id="date" name="date" path="date" /></td>
+					<td align="right">Date (YYYY-MM-DD):</td>
+					<td align="left"><form:input id="date" name="date" path="date" /></td>
 				</tr>
 				<tr>
-					<td>Location:</td>
-					<td>
+					<td align="right">Location:</td>
+					<td align="left">
 						<form:select path="location">
 							<c:forEach var="location" items="${locationList}">
 			                    <form:option value="${location.id}"><c:out value="${location.id}-${location.name}"/></form:option>
@@ -48,8 +49,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Time slot:</td>
-					<td>
+					<td align="right">Time slot:</td>
+					<td align="left">
 						<form:select path="timeslot">
 							<c:forEach var="timeslot" items="${timeslotList}">
 			                    <form:option value="${timeslot.id}"><c:out value="${timeslot.id}-${timeslot.title}"/></form:option>
@@ -59,7 +60,7 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td><form:button id="btnSubmit" type="submit" onclick="return validateForm();">Create</form:button></td>
+					<td align="left"><form:button id="btnSubmit" type="submit" onclick="return validateForm();">Create</form:button></td>
 				</tr>
 			</table>
 		</form:form>

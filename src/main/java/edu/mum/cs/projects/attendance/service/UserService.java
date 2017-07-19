@@ -4,4 +4,5 @@ import edu.mum.cs.projects.attendance.domain.entity.User;
 
 public interface UserService {
 	User login(String userName, String password);
+	User findByUserName(String userName);
 }
