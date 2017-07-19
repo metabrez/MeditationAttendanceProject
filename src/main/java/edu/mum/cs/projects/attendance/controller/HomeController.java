@@ -23,6 +23,25 @@ public class HomeController {
         return "home";
     }
 	
+	@RequestMapping(value = {"/welcome"}, method = RequestMethod.GET)
+    public String afterLogin(Model model) {
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+		for (GrantedAuthority grantedAuthority : authorities) {
+			switch(grantedAuthority.getAuthority()) {
+			case "ROLE_ADMIN":
+				return "/admin/welcomeStaff";
+			case "ROLE_FACULTY":
+				return "/faculty/welcomeStaff";
+			case "ROLE_STAFF":
+				return "/staff/welcomeStaff";
+			case "ROLE_STUDENT":
+				return "/student/welcomeStaff";
+			}
+		}  
+        return "home";
+    }
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
 		if (error != null)
