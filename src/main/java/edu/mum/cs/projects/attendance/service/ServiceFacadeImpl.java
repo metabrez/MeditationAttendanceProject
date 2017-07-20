@@ -208,4 +208,9 @@ public class ServiceFacadeImpl implements IServiceFacade {
 		return attendanceService.retrieveStudentAttendanceRecords(courseOffering);
 	}
 
+	@Override
+	public int updateUser(String userName, String password, int roleId, String studentId, Long facultyId) {
+		return userRepository.userUpdate(userName, password, roleId, studentId, facultyId);
+	}
+
 }
