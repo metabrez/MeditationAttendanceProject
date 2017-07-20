@@ -26,6 +26,7 @@ public interface IServiceFacade {
 	//using for admin
     public User findUser(String userName);
     public User createUser(String userName, String password, int roleId, String studentId, Long facultyId);
+    public int updateUser(String userName, String password, int roleId, String studentId, Long facultyId);
     public void deleteUserByUserName(String userName);
     public List<User> findAllUsers();
     

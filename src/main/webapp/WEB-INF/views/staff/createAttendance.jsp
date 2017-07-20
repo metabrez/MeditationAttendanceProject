@@ -32,17 +32,25 @@
             <c:if test="${not empty error}">
                 <div style="color: red;">${error}</div>
             </c:if>
-			<table align="center" border="1" cellspacing="500" cellpadding="200">
+			<table align="center" border="0" cellspacing="500" cellpadding="200">
 				<tr>
-					<td align="right">Student's barcode:</td>
+					<td align="right">Student's barcode:&nbsp;&nbsp;</td>
 					<td align="left"><form:input id="barcode" name="barcode" path="barcode" /></td>
 				</tr>
 				<tr>
-					<td align="right">Date (YYYY-MM-DD):</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td align="right">Date (YYYY-MM-DD):&nbsp;&nbsp;</td>
 					<td align="left"><form:input id="date" name="date" path="date" /></td>
 				</tr>
 				<tr>
-					<td align="right">Location:</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td align="right">Location:&nbsp;&nbsp;</td>
 					<td align="left">
 						<form:select path="location">
 							<c:forEach var="location" items="${locationList}">
@@ -52,7 +60,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td align="right">Time slot:</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td align="right">Time slot:&nbsp;&nbsp;</td>
 					<td align="left">
 						<form:select path="timeslot">
 							<c:forEach var="timeslot" items="${timeslotList}">
@@ -60,6 +72,10 @@
 			                </c:forEach>
 				       	</form:select>
 				   	</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td></td>

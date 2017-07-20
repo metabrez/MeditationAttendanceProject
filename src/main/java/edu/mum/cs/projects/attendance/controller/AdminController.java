@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,8 @@ public class AdminController {
 		System.out.println("facultyID["+facultyId+"]");
 		System.out.println("studentId["+studentId+"]");
 		System.out.println("password["+password+"]");
-		long lFacultyID = Long.valueOf(facultyId);
+		long lFacultyID = 0;
+		if(facultyId != null) Long.valueOf(facultyId);
 		if (serviceFacade.createUser(userName, StringUtil.getBCrypt(password), roleId, studentId, lFacultyID) != null) {
 			return "redirect:/admin/userInfo";
 		} else {
@@ -69,14 +71,22 @@ public class AdminController {
 		return "redirect:/admin/userInfo";
 	}
 
-//	@PostMapping("/updateUser")
-//	public String updateUser(@ModelAttribute("user") User user) {
-//		System.out.println("user is going to be updated.");
-//		System.out.println("user name is: " + user.getUserName());
-//		serviceFacade.updateUser(user);
-//		System.out.println("user is updated");
-//		return "redirect:/admin/userInfo";
-//	}
+	@PostMapping("/updateUser")
+	//public String updateUser(@PathParam("userName")String userName, @PathParam("password")String password, @PathParam("roleId")int roleId, @PathParam("studentId")String studentId, @PathParam("facultyId")Long facultyId, Model model) {
+	public String updateUser(@PathParam("userName")String userName, @PathParam("roleId")int roleId, @PathParam("studentId")String studentId, @PathParam("facultyId")Long facultyId, Model model) {
+		try {
+			//not allow to update password
+			System.out.println("===["+userName+"]");
+			System.out.println("===["+roleId+"]");
+			System.out.println("===["+studentId+"]");
+			System.out.println("===["+facultyId+"]");
+			serviceFacade.updateUser(userName, "", roleId, studentId, facultyId);
+		} catch (Exception e) {
+			model.addAttribute("msg", "This user couldn't be updated.");
+			return "admin/error";
+		}
+		return "redirect:/admin/userInfo";
+	}
 
 	@GetMapping(value = "/search")
 	public String searchByName(Model model, @RequestParam("userName") String userName) {
