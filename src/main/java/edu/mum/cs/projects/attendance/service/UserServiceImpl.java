@@ -1,5 +1,7 @@
 package edu.mum.cs.projects.attendance.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +24,18 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByUserName(userName);
 	}
 
+	@Override
+	public List<User> findAllUsers() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public User createUser(User user) {
+		return userRepository.save(user);
+	}
+
+	@Override
+	public void deleteUserByUserName(String userName) {
+		userRepository.delete(userName);		
+	}
 }

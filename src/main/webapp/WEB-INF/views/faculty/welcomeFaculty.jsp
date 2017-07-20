@@ -10,7 +10,7 @@
 			</form>
 
 			<h2>
-				Welcome ADMIN ${pageContext.request.userPrincipal.name} | <a
+				Welcome FACULTY ${pageContext.request.userPrincipal.name} | <a
 					onclick="document.forms['logoutForm'].submit()">Logout</a>
 			</h2>
 

@@ -15,6 +15,7 @@ import edu.mum.cs.projects.attendance.domain.entity.BarcodeRecord;
 import edu.mum.cs.projects.attendance.domain.entity.Course;
 import edu.mum.cs.projects.attendance.domain.entity.CourseOffering;
 import edu.mum.cs.projects.attendance.domain.entity.Enrollment;
+import edu.mum.cs.projects.attendance.domain.entity.Faculty;
 import edu.mum.cs.projects.attendance.domain.entity.Location;
 import edu.mum.cs.projects.attendance.domain.entity.Student;
 import edu.mum.cs.projects.attendance.domain.entity.Timeslot;
@@ -54,12 +55,9 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	@Autowired
 	private LocationService locationService;
 	
-	@Override
-	public List<Course> getCourseListForStudent(String studentID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	@Autowired
+	private FacultyService facultyService;
+	
 	@Override
 	public List<StudentAttendance> getCourseAttendance(String courseID) {
 		// TODO Auto-generated method stub
@@ -84,9 +82,8 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	}
 
 	@Override
-	public User findUser(String userID) {
-		// TODO Auto-generated method stub
-		return null;
+	public User findUser(String userName) {
+		return userService.findByUserName(userName);
 	}
 
 	@Override
@@ -117,10 +114,10 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	}
 	
 	@Override
-	public List<BarcodeRecord> getCourseAttendanceDetails(int offerID, String studentID) {
+	public List<BarcodeRecord> getCourseAttendanceDetails(Long offerID, String studentID) {
 		List<BarcodeRecord> listRecord = null;
 
-		CourseOffering offer = courseOfferingRepository.findOne((long)offerID);
+		CourseOffering offer = courseOfferingRepository.findOne(offerID);
 		if(offer != null) {
 			AcademicBlock block = academicBlockRepository.findByBeginDate(offer.getStartDate());
 			if(block != null) {
@@ -161,9 +158,8 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	}
 
 	@Override
-	public List<Student> findStudents(String id, String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Student> findByStudentIdContaining(String studentID) {
+		return studentService.findByStudentIdContaining(studentID);
 	}
 
 	@Override
@@ -179,6 +175,42 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	@Override
 	public Student findStudentByBarcode(String barcode) {
 		return studentService.findStudentByBarcode(barcode);
+	}
+
+	@Override
+	public List<Enrollment> getEnrollmentCourseListForStudent(String studentID) {
+		Student student = studentService.findStudentById(studentID);
+		return enrollmentService.getEnrollmentByStudent(student);
+	}
+
+	@Override
+	public List<User> findAllUsers() {
+		return userService.findAllUsers();
+	}
+
+	@Override
+	public User createUser(User user) {
+		return userService.createUser(user);
+	}
+
+	@Override
+	public void deleteUserByUserName(String userName) {
+		userService.deleteUserByUserName(userName);
+	}
+
+	@Override
+	public Faculty getFacultyByUserName(String userName) {
+		return facultyService.getFacultyByUserName(userName);
+	}
+
+	@Override
+	public List<CourseOffering> getCourseOfferings(Faculty faculty) {
+		return facultyService.getCourseOfferings(faculty);
+	}
+
+	@Override
+	public List<StudentAttendance> retrieveStudentAttendanceRecords(CourseOffering courseOffering) {
+		return attendanceService.retrieveStudentAttendanceRecords(courseOffering);
 	}
 
 }

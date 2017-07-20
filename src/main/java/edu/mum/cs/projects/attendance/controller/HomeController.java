@@ -30,13 +30,13 @@ public class HomeController {
 		for (GrantedAuthority grantedAuthority : authorities) {
 			switch(grantedAuthority.getAuthority()) {
 			case "ROLE_ADMIN":
-				return "/admin/welcomeStaff";
+				return "redirect:/admin/userInfo";
 			case "ROLE_FACULTY":
-				return "/faculty/welcomeStaff";
+				return "redirect:/faculty/facultyPage";
 			case "ROLE_STAFF":
-				return "/staff/welcomeStaff";
+				return "redirect:/staff/findStudent";
 			case "ROLE_STUDENT":
-				return "/student/welcomeStaff";
+				return "redirect:/student/studentCourseList";
 			}
 		}  
         return "home";
