@@ -20,7 +20,7 @@
 
 			<h2>Attendance Detail</h2>
 
-			<form name="detailForm" action="/deleteAttendance" method="post">
+			<form name="detailForm" action="/staff/deleteAttendance" method="post">
 				<c:if test="${not empty error}">
 	                <div class="msg">${error}</div>
 	            </c:if>

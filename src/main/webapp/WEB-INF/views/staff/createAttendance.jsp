@@ -24,7 +24,7 @@
 </script>
 <div class="container-wrapper">
 	<div class="container">
-		<form:form method="POST" action="/saveAttendance" modelAttribute="attendanceRecord">
+		<form:form method="POST" action="/staff/saveAttendance" modelAttribute="attendanceRecord">
 			<h2>Create a Meditation Attendance Record</h2>
 			<c:if test="${not empty createResult}">
                 <div class="msg">${createResult}</div>

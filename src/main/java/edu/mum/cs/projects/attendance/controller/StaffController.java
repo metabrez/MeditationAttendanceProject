@@ -36,9 +36,23 @@ public class StaffController {
         return new AttendanceRecord();         
     }
 	
-	@RequestMapping(value = {"/welcomeStaff"}, method = RequestMethod.GET)
-    public String welcome(Model model) {
-        return "welcomeStaff";
+	@GetMapping("/findStudent")
+	public String findStudent(Model model) {
+        return "staff/findStudent";
+    }
+	
+	@RequestMapping(value="/findStudentResult", method=RequestMethod.POST)
+    public String findStudentResult(HttpServletRequest httpRequest, Model model) {
+		System.out.println("============findStudentResult=============");
+		String studentID = httpRequest.getParameter("searchStudentId");
+		System.out.println("============["+ studentID + "]");
+		List<Student> list = null;
+		if(studentID != null && !studentID.equals("")) {
+			list = serviceFacade.findByStudentIdContaining(studentID);
+			model.addAttribute("students", list);
+			System.out.println("============["+ list.size() + "]");
+		}
+        return "staff/findStudentResult";
     }
 	
 	@GetMapping("/studentCoursesAttendances")
@@ -48,17 +62,9 @@ public class StaffController {
         if(list.size() > 0) {
         	student = list.get(0).getStudent();
         }
-//		for(StudentAttendance sa : list) {
-//			System.out.println(sa.getStudent().getId());
-//			System.out.println(sa.getCourseOffering().getCourse().getName());
-//			System.out.println(sa.getCourseOffering().getCourse().getId());
-//			System.out.println(sa.getAttendance().toString());
-//			System.out.println(sa.getMeditationCount() + "|" + sa.getMeditaionPercentage() + "|" + sa.getMeditationExtraGrade());
-//			System.out.println("----");
-//		}
         model.addAttribute("student", student);
 		model.addAttribute("attendances", list);
-        return "studentAttendance";
+        return "staff/studentAttendance";
     }
 	
 	@GetMapping("/studentCourseAttendanceDetail")
@@ -75,12 +81,12 @@ public class StaffController {
 			break;
 		}
 		
-		int courseOfferID;
+		Long courseOfferID;
 		try {
 			model.addAttribute("studentId", studentId);
 			model.addAttribute("offerId", offerId);
 			
-			courseOfferID = Integer.valueOf(offerId);
+			courseOfferID = Long.valueOf(offerId);
 			List<BarcodeRecord> list = serviceFacade.getCourseAttendanceDetails(courseOfferID, studentId);
 			
 			if(list != null) {
@@ -99,7 +105,7 @@ public class StaffController {
 			System.out.println(ex.getMessage());
 			model.addAttribute("error", ex.getMessage());
 		}
-		return "attendanceDetail";
+		return "staff/attendanceDetail";
     }
 	
 	@RequestMapping(value="/deleteAttendance", method=RequestMethod.POST)
@@ -115,7 +121,7 @@ public class StaffController {
         	rattrs.addAttribute("deleteResult", "NG");
         }
         
-        return "redirect:/studentCourseAttendanceDetail?offerId="+offerId+"&studentId="+studentId;
+        return "redirect:/staff/studentCourseAttendanceDetail?offerId="+offerId+"&studentId="+studentId;
     }
 	
 	@GetMapping("/createAttendance")
@@ -134,14 +140,14 @@ public class StaffController {
 		
 		model.addAttribute("timeslotList", serviceFacade.getAllTimeslots());
 		model.addAttribute("locationList", serviceFacade.getAllLocations());
-        return new ModelAndView("createAttendance", "attendanceRecord", getAttendanceRecord());
+        return new ModelAndView("staff/createAttendance", "attendanceRecord", getAttendanceRecord());
     }
 	
 	@RequestMapping(value="/saveAttendance", method=RequestMethod.POST)
 	public String saveAttendance(@Valid @ModelAttribute("attendanceRecord")AttendanceRecord attendanceRecord, BindingResult result, ModelMap model, RedirectAttributes rattrs) {
 		if (result.hasErrors()) {
 			System.out.println("has error............");
-            return "createAttendance";
+            return "staff/createAttendance";
         }
 		
 		//check valid barcode
@@ -157,6 +163,6 @@ public class StaffController {
 			rattrs.addAttribute("saveResult", "NOT_VALID_BARCODE");
 		}
 		
-        return "redirect:/createAttendance";
+        return "redirect:/staff/createAttendance";
     }
 }

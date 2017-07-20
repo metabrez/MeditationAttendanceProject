@@ -1,8 +1,10 @@
 <html>
 <head>
 
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,7 +65,7 @@
 								class="icon-bar"></span> <span class="icon-bar"></span> <span
 								class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="/">Meditation Attendance System</a>
+						<a class="navbar-brand" href="#">Meditation Attendance System</a>
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<!-- <ul class="nav navbar-nav">
@@ -77,19 +79,61 @@
 						</ul> -->
 
 						<ul class="nav navbar-nav pull-right">
-							<c:if test="${pageContext.request.userPrincipal.name != null}">
-						        <form id="logoutForm" method="POST" action="${contextPath}/logout">
-						            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						        </form>
-						
-						        <h4>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h4>
-						
-						    </c:if>
-						
-							<!--<c:if test="${pageContext.request.userPrincipal.name!=null}">
-								<li><a>Welcome : ${pageContext.request.userPrincipal.name}</a></li>
-								<li><a href="<c:url value="/logout"/>">Logout</a></li>
-							</c:if>-->
+							<c:if test="${not empty pageContext.request.userPrincipal}">
+							    <!-- Student menu -->
+							    <sec:authorize access="hasRole('ROLE_STUDENT') and isAuthenticated()">
+									<c:if test="${pageContext.request.userPrincipal.name != null}">
+										<form id="logoutForm" method="POST" action="${contextPath}/logout">
+								            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								        </form>
+								
+								        <h4 style="color: white;" align="right">Welcome Student [${pageContext.request.userPrincipal.name}] | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h4>
+									</c:if>	
+								</sec:authorize>
+								
+								<!-- Staff menu -->
+								<sec:authorize access="hasRole('ROLE_STAFF') and isAuthenticated()">
+									<c:if test="${pageContext.request.userPrincipal.name != null}">
+										<form id="logoutForm" method="POST" action="${contextPath}/logout">
+								            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								        </form>
+								
+								        <h4 style="color: white;" align="right">Welcome Staff [${pageContext.request.userPrincipal.name}]</h4>
+								        <h4>
+								        	<a href="/staff/createAttendance">Create Attendance Record</a> | 
+								        	<a href="/staff/findStudent">Find Students</a> |
+								        	<a onclick="document.forms['logoutForm'].submit()">Logout</a>
+								        </h4>
+									</c:if>	
+								</sec:authorize>
+								
+								<!-- Faculty menu -->
+								<sec:authorize access="hasRole('ROLE_FACULTY') and isAuthenticated()">
+									<c:if test="${pageContext.request.userPrincipal.name != null}">
+										<form id="logoutForm" method="POST" action="${contextPath}/logout">
+								            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								        </form>
+								
+								        <h4 style="color: white;" align="right">Welcome Faculty [${pageContext.request.userPrincipal.name}] | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h4>
+									</c:if>	
+								</sec:authorize>
+								
+								<!-- Admin menu -->
+								<sec:authorize access="hasRole('ROLE_ADMIN') and isAuthenticated()">
+									<c:if test="${pageContext.request.userPrincipal.name != null}">
+										<form id="logoutForm" method="POST" action="${contextPath}/logout">
+								            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								        </form>
+								
+								        <h4 style="color: white;" align="right">Welcome Admin [${pageContext.request.userPrincipal.name}]</h4>
+								        <h4>
+								        	<a href="/admin/newUser">Create an User</a> |
+								        	<a href="/admin/userInfo">View Users</a> |
+								        	<a onclick="document.forms['logoutForm'].submit()">Logout</a>
+								        </h4>
+									</c:if>	
+								</sec:authorize>
+							</c:if>
 
 							<c:if test="${pageContext.request.userPrincipal.name==null}">
 								<h4><a href="<c:url value="/login"/>">Login</a></h4>
