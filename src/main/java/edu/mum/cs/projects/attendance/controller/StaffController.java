@@ -58,12 +58,18 @@ public class StaffController {
 	@GetMapping("/studentCoursesAttendances")
     public String studentCoursesAttendances(@RequestParam(value="id", required=true) String studentID, Model model) {
         List<StudentAttendance> list = serviceFacade.getAttendanceForAllEnrollmentCourses(studentID);
-        Student student = null;
-        if(list.size() > 0) {
-        	student = list.get(0).getStudent();
+        if(list == null) {
+        	model.addAttribute("error", "Not found any information for Student ID ["+studentID+"]");
         }
-        model.addAttribute("student", student);
-		model.addAttribute("attendances", list);
+        else {
+        	Student student = null;
+            if(list.size() > 0) {
+            	student = list.get(0).getStudent();
+            }
+            model.addAttribute("student", student);
+    		model.addAttribute("attendances", list);
+        }
+        
         return "staff/studentAttendance";
     }
 	
@@ -91,7 +97,7 @@ public class StaffController {
 			
 			if(list != null) {
 				model.addAttribute("attendanceDetails", list);
-				list.forEach(System.out::println);
+				//list.forEach(System.out::println);
 			}
 			else {
 				model.addAttribute("error", "There are no attendance for this Student ID [" + studentId + "].");
@@ -131,10 +137,10 @@ public class StaffController {
 			model.addAttribute("createResult", "Create attendance record successfully!");
 			break;
 		case "NG":
-			model.addAttribute("createResult", "Failed to create attendance record!");
+			model.addAttribute("error", "Failed to create attendance record!");
 			break;
 		case "NOT_VALID_BARCODE":
-			model.addAttribute("createResult", "Invalid barcode!");
+			model.addAttribute("error", "Barcode not existing in system!");
 			break;
 		}
 		
