@@ -12,7 +12,6 @@ import edu.mum.cs.projects.attendance.domain.AttendanceRecord;
 import edu.mum.cs.projects.attendance.domain.StudentAttendance;
 import edu.mum.cs.projects.attendance.domain.entity.AcademicBlock;
 import edu.mum.cs.projects.attendance.domain.entity.BarcodeRecord;
-import edu.mum.cs.projects.attendance.domain.entity.Course;
 import edu.mum.cs.projects.attendance.domain.entity.CourseOffering;
 import edu.mum.cs.projects.attendance.domain.entity.Enrollment;
 import edu.mum.cs.projects.attendance.domain.entity.Faculty;
@@ -23,6 +22,9 @@ import edu.mum.cs.projects.attendance.domain.entity.User;
 import edu.mum.cs.projects.attendance.repository.AcademicBlockRepository;
 import edu.mum.cs.projects.attendance.repository.BarcodeRecordRepository;
 import edu.mum.cs.projects.attendance.repository.CourseOfferingRepository;
+import edu.mum.cs.projects.attendance.repository.FacultyRepository;
+import edu.mum.cs.projects.attendance.repository.RoleRepository;
+import edu.mum.cs.projects.attendance.repository.UserRepository;
 import edu.mum.cs.projects.attendance.util.DateUtil;
 
 @Service
@@ -58,38 +60,18 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	@Autowired
 	private FacultyService facultyService;
 	
-	@Override
-	public List<StudentAttendance> getCourseAttendance(String courseID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
-	@Override
-	public User login(String userName, String password) {
-		return userService.login(userName, password);
-	}
-
-	@Override
-	public List<Course> getCourseListForFaculty(int facultyID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<StudentAttendance> getAttendance(String courseID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	@Autowired
+	private FacultyRepository facultyRepository;
+	
 	@Override
 	public User findUser(String userName) {
 		return userService.findByUserName(userName);
-	}
-
-	@Override
-	public int updateUserRole(User user) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -189,8 +171,21 @@ public class ServiceFacadeImpl implements IServiceFacade {
 	}
 
 	@Override
-	public User createUser(User user) {
-		return userService.createUser(user);
+	public User createUser(String userName, String password, int roleId, String studentId, Long facultyId) {
+		User user = new User();
+		user.setUserName(userName);
+		user.setPassword(password);
+		user.setRole(roleRepository.findById(roleId));
+		if (facultyId == null) {
+			user.setStudent(studentService.findStudentById(studentId));
+			user.setFaculty(null);
+		} 
+		if (studentId == null || studentId.equals("")) {
+			user.setStudent(null);
+			user.setFaculty(facultyRepository.findById(facultyId));
+		}
+
+		return userRepository.save(user);
 	}
 
 	@Override

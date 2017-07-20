@@ -2,11 +2,12 @@ package edu.mum.cs.projects.attendance.controller;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.mum.cs.projects.attendance.domain.entity.User;
 import edu.mum.cs.projects.attendance.service.IServiceFacade;
+import edu.mum.cs.projects.attendance.util.StringUtil;
 
 @Controller
 @RequestMapping("/admin")
@@ -28,9 +30,14 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-	public String createUser(@ModelAttribute("user") User user) {
-		if (serviceFacade.createUser(user) != null) {
-			return "redirect:admin/userInfo";
+	public String createUser(@PathParam("userName")String userName, @PathParam("password")String password, @PathParam("roleId")int roleId, @PathParam("studentId")String studentId, @PathParam("facultyId")Long facultyId) {
+		
+		System.out.println("facultyID["+facultyId+"]");
+		System.out.println("studentId["+studentId+"]");
+		System.out.println("password["+password+"]");
+		long lFacultyID = Long.valueOf(facultyId);
+		if (serviceFacade.createUser(userName, StringUtil.getBCrypt(password), roleId, studentId, lFacultyID) != null) {
+			return "redirect:/admin/userInfo";
 		} else {
 			return "admin/error";
 		}

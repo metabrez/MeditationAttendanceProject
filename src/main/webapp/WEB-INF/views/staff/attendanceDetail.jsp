@@ -22,7 +22,7 @@
 
 			<form name="detailForm" action="/staff/deleteAttendance" method="post">
 				<c:if test="${not empty error}">
-	                <div class="msg">${error}</div>
+	                <div style="color: red;">${error}</div>
 	            </c:if>
 				<c:if test="${not empty delResult}">
 	                <div class="msg">${delResult}</div>
@@ -55,6 +55,7 @@
 					</c:forEach>
 				</table>
 			</form>
+			<br/>
 		</div>
 	</div>
 </div>

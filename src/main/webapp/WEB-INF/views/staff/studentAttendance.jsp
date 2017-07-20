@@ -4,6 +4,9 @@
 	<div class="container">
 		<div id="login-box">
 			<h2>Students Meditation Attendance Report</h2>
+			<c:if test="${not empty error}">
+                <div style="color: red;">${error}</div>
+            </c:if>
 			<br>
 			<h5>Student ID: ${student.studentId}</h5>
 			<h5>Name: ${student.firstName} ${student.lastName}</h5>

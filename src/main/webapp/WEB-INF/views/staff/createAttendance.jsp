@@ -29,6 +29,9 @@
 			<c:if test="${not empty createResult}">
                 <div class="msg">${createResult}</div>
             </c:if>
+            <c:if test="${not empty error}">
+                <div style="color: red;">${error}</div>
+            </c:if>
 			<table align="center" border="1" cellspacing="500" cellpadding="200">
 				<tr>
 					<td align="right">Student's barcode:</td>
